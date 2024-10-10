@@ -1,68 +1,13 @@
 "use client";
 import { useInView } from "framer-motion";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ProjectTag from "./ProjectTag";
 import ProjectCard from "./ProjectCard";
 import { motion } from "framer-motion";
-
-const projectsData = [
-  {
-    id: 1,
-    title: "Coffee Website",
-    description: "Project 1 description",
-    image: "/projects/1.png",
-    tag: ["All", "Frontend"],
-    gitUrl: "/",
-    previewUrl: "/",
-  },
-  {
-    id: 2,
-    title: "Camp Website",
-    description: "Project 2 description",
-    image: "/projects/2.png",
-    tag: ["All", "Frontend"],
-    gitUrl: "/",
-    previewUrl: "/",
-  },
-  {
-    id: 3,
-    title: "Next Auth V5",
-    description: "Project 3 description",
-    image: "/projects/3.png",
-    tag: ["All", "FullStack"],
-    gitUrl: "/",
-    previewUrl: "/",
-  },
-  {
-    id: 4,
-    title: "Next js 14",
-    description: "Project 4 description",
-    image: "/projects/4.png",
-    tag: ["All", "Frontend"],
-    gitUrl: "/",
-    previewUrl: "/",
-  },
-  {
-    id: 5,
-    title: "Ecommerce Nextjs",
-    description: "Authentication and CRUD operations",
-    image: "/projects/5.png",
-    tag: ["All", "FullStack"],
-    gitUrl: "/",
-    previewUrl: "/",
-  },
-  {
-    id: 6,
-    title: "Twitch Clone",
-    description: "Project 5 description",
-    image: "/projects/8.png",
-    tag: ["All", "FullStack"],
-    gitUrl: "/",
-    previewUrl: "/",
-  },
-];
+import { projects } from "@/types";
 
 const Project = () => {
+  const [projects, setProjects] = useState<projects[]>([]);
   const [tag, setTag] = useState("All");
   const ref = useRef(null);
 
@@ -72,14 +17,44 @@ const Project = () => {
     setTag(newTag);
   };
 
-  const filtredProject = projectsData.filter((project) =>
-    project.tag.includes(tag)
+  const filtredProject = projects.filter((project) =>
+    project.tags.includes(tag)
   );
 
   const cardVariants = {
     initial: { y: 50, opacity: 0 },
     animate: { y: 0, opacity: 1 },
   };
+
+  useEffect(() => {
+    const abortController = new AbortController(); // AbortController oluştur
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch("/api/pb/projects", {
+          method: "GET",
+          signal: abortController.signal,
+        }); // İstek için abortController ekle
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`); // HTTP hatası kontrolü
+        }
+        const data = await response.json();
+        setProjects(data);
+        console.log(data);
+      } catch (error: unknown) {
+        // Hata türünü 'unknown' olarak belirtiyoruz
+        if (error instanceof Error && error.name !== "AbortError") {
+          // Hata nesnesi kontrolü
+          console.error("Error fetching projects:", error); // Sadece abort hatası dışındaki hataları göster
+        }
+      }
+    };
+
+    fetchProjects(); // Fonksiyonu çağır
+
+    return () => {
+      abortController.abort(); // Bileşen unmount olduğunda isteği iptal et
+    };
+  }, []);
   return (
     <section id="projects" className="mb-12">
       <h2
@@ -121,6 +96,8 @@ const Project = () => {
             transition={{ duration: 0.3, delay: index * 0.4 }}
           >
             <ProjectCard
+              collectionId={project.collectionId}
+              id={project.id}
               description={project.description}
               gitUrl={project.gitUrl}
               image={project.image}

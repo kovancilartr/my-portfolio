@@ -1,16 +1,19 @@
 import { Code, CodeSquareIcon, EyeIcon } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 
 interface ProjectCardProps {
+  collectionId: string;
+  id: string;
   title: string;
   description: string;
   image: string;
   gitUrl: string;
   previewUrl: string;
 }
-
 const ProjectCard = ({
+  collectionId,
+  id,
   description,
   gitUrl,
   image,
@@ -21,7 +24,17 @@ const ProjectCard = ({
     <div className="px-6">
       <div
         className="h-56 md:h-72 rounded-2xl relative group"
-        style={{ background: `url(${image})`, backgroundSize: "cover" }}
+        style={{
+          background: `url(${
+            "https://kovancilar.pockethost.io/api/files/" +
+            collectionId +
+            "/" +
+            id +
+            "/" +
+            image
+          })`,
+          backgroundSize: "cover",
+        }}
       >
         <div
           className="items-center justify-center absolute top-0 left-0 w-full h-full
