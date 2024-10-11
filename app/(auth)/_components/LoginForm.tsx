@@ -17,12 +17,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { signIn } from "next-auth/react";
+import { revalidatePath } from "next/cache";
+import { toast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 export function LoginForm() {
   const [formData, setFormData] = useState([]);
@@ -40,8 +43,30 @@ export function LoginForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const result = await signIn("credentials", {
+      username: values.email, // 'email' yerine 'username' kullanın
+      password: values.password,
+      redirect: false, // Yönlendirmeyi devre dışı bırak
+    });
+
+    if (result?.error) {
+      toast({
+        variant: "destructive",
+        title: "Üzgünüm kullanıcı adı veya şifre hatalı.",
+        duration: 5000,
+      });
+    } else {
+      toast({
+        variant: "success",
+        title: "Giriş başarılı, Yönlendirme yapılıyor.",
+        onCustomAction: () => {
+          setTimeout(() => {
+            window.location.href = "/"; // 3 saniye bekledikten sonra ana sayfaya yönlendir
+          }, 3000);
+        },
+      });
+    }
   }
 
   return (

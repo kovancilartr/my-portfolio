@@ -7,16 +7,20 @@ import Image from "next/image";
 import { hero as HeroType } from "@/types";
 import { DotLoader } from "react-spinners";
 import { fetchHeroData } from "@/actions/pb";
+import { useSession } from "next-auth/react";
 
 const Hero = () => {
   const [heros, setHeros] = useState<HeroType[]>([]);
   const [loading, setLoading] = useState(true);
+  const { data: session } = useSession(); // Oturum bilgilerini al
 
   useEffect(() => {
     const fetchHero = async () => {
       try {
         const data = await fetchHeroData();
         setHeros(data);
+        console.log("Session Bilgisi :", session); // Session bilgilerini yazdır
+        console.log("Oturum Açık mı?:", !!session); // Oturum açık mı kontrol et
       } catch (error) {
         console.error(error);
       } finally {
@@ -24,7 +28,7 @@ const Hero = () => {
       }
     };
     fetchHero();
-  }, []);
+  }, [session]); // session değiştiğinde fetchHero çağrılır
 
   if (loading) {
     return <DotLoader className="bgOne textOne" loading={true} size={150} />;
@@ -63,6 +67,12 @@ const Hero = () => {
             </h1>
             <p className="textOne text-base mb-6 lg:text-lg xl:text-xl">
               {hero.description}
+              {session && ( // Oturum açılmışsa kullanıcı adını ekle
+                <span className="text-mycolor-500">
+                  {" "}
+                  - Hoş geldiniz, {session.user?.name}! {session.user?.email}
+                </span>
+              )}
             </p>
 
             <div className="p-2 gap-4">
