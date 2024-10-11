@@ -2,30 +2,35 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import NavItem from "./NavItem";
+import { ModeToggle } from "../ModeToggle";
 
 const NavLinks = [
   {
-    name: "Home",
+    name: "Ana Sayfa",
     path: "/",
   },
   {
-    name: "About",
+    name: "Hakkımda",
     path: "#about",
   },
   {
-    name: "Project",
+    name: "Projeler",
     path: "#projects",
   },
   {
-    name: "Contact",
+    name: "İletişim",
     path: "#contact",
+  },
+  {
+    name: "Giriş",
+    path: "/auth/login",
   },
 ];
 const Navbar = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-10 bg-mycolor-800 bg-opacity-85 text-black shadow-md shadow-slate-400 rounded-b-full">
+    <nav className="fixed top-0 left-0 right-0 z-10 bgOne bg-opacity-85 textOne shadow-md shadow-slate-400 rounded-b-full">
       <div className="flex items-center justify-between px-52 py-2">
         <Link
           href="/"
@@ -41,6 +46,7 @@ const Navbar = () => {
                 <NavItem href={link.path} title={link.name} />
               </li>
             ))}
+            <ModeToggle />
           </ul>
         </div>
       </div>

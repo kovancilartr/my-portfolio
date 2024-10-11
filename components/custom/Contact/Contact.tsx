@@ -46,13 +46,16 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact">
-      <div className="grid grid-cols-1 md:grid-cols-2 my-10 gap-5 mt-12 md:mt-24">
+    <section id="contact" className="border-y-2 p-2 m-2">
+      <div className="flex justify-center items-center text-2xl font-pacifico pt-2">
+        İletişim
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 my-4 gap-5">
         <div className="col-span-1">
-          <h5 className="text-mycolor-100 font-semibold mb-4 text-2xl">
+          <h5 className="textOne font-pacifico font-semibold mb-4 text-2xl">
             Lets Connect
           </h5>
-          <p className="text-base text-white">
+          <p className="text-base textOne font-roboto">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus
             iste molestias nulla esse cum adipisci sint labore quasi id?
             Officiis optio tenetur error, nesciunt mollitia dolore aut sed
@@ -62,15 +65,15 @@ const Contact = () => {
           </p>
 
           <div className="flex flex-row gap-4 mt-5">
-            <BsGithub className="h-10 w-10 text-white" />
-            <BsLinkedin className="h-10 w-10 text-white" />
-            <BsGoogle className="h-10 w-10 text-white" />
+            <BsGithub className="h-10 w-10 textOne" />
+            <BsLinkedin className="h-10 w-10 textOne" />
+            <BsGoogle className="h-10 w-10 textOne" />
           </div>
         </div>
 
         <div className="col-span-1">
           {emailSubmited ? (
-            <Alert className="bg-green-600 text-white">
+            <Alert className="bg-green-600 textOne">
               <Terminal className="h-4 w-4" />
               <AlertTitle>Heads up!</AlertTitle>
               <AlertDescription>
@@ -79,43 +82,43 @@ const Contact = () => {
             </Alert>
           ) : (
             <form className="flex flex-col" onSubmit={handleSubmit}>
-              <div className="mb-6 text-white">
-                <Label>Your Email</Label>
+              <div className="mb-2 textOne">
+                <Label>Mail Adresiniz</Label>
                 <Input
                   type="email"
                   name="email"
-                  placeholder="Email"
+                  placeholder="Mail adresinizi yazınız."
                   required
-                  className="bg-mycolor-600 mt-2"
+                  className="bg-mycolor-600 text-white placeholder:text-slate-300 placeholder:font-roboto placeholder:text-xs"
                 />
               </div>
 
-              <div className="mb-6 text-white">
-                <Label>Subject</Label>
+              <div className="mb-2 textOne">
+                <Label>Konu</Label>
                 <Input
                   type="text"
                   name="subject"
-                  placeholder="Subject"
+                  placeholder="Konu"
                   required
-                  className="bg-mycolor-600 mt-2"
+                  className="bg-mycolor-600 text-white placeholder:text-slate-300 placeholder:font-roboto placeholder:text-xs"
                 />
               </div>
 
-              <div className="mb-6 text-white">
-                <Label>Content</Label>
+              <div className="mb-2 textOne">
+                <Label>Mesajınız</Label>
                 <Textarea
                   name="message"
-                  className="bg-mycolor-600 mt-2"
-                  placeholder="Type your message here."
+                  className="bg-mycolor-600 text-white placeholder:text-slate-300 placeholder:font-roboto placeholder:text-xs"
+                  placeholder="İletmek istediğiniz mesajınızı yazınız."
                   required
                 />
               </div>
 
               <Button
                 type="submit"
-                className="bg-mycolor-900 text-black font-bold hover:bg-mycolor-800"
+                className="bg-black text-white font-bold hover:bg-mycolor-800 hover:text-black"
               >
-                Send Message
+                Gönder
               </Button>
             </form>
           )}

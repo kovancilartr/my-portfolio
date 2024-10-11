@@ -20,7 +20,7 @@ const TabButton = ({ active, selectTab, children }: TabButtonProps) => {
   const buttonClasses = active ? "text-white" : "text-slate-100";
   return (
     <button onClick={selectTab}>
-      <p className={`${buttonClasses} mr-3 font-semibold`}>{children}</p>
+      <p className={`${buttonClasses} mr-3 font-semibold textOne`}>{children}</p>
       <motion.div
         className="h-1 bg-mycolor-100 mt-2 mr-3"
         initial="default"

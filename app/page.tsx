@@ -8,7 +8,7 @@ import Project from "@/components/custom/Projects/Project";
 export default function Home() {
   return (
     <>
-      <main className="flex min-h-screen flex-col bg-mycolor-400">
+      <main className="flex min-h-screen flex-col bgOne">
         <Navbar />
         <div className="container mx-auto">
           <Hero />

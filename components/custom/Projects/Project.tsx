@@ -5,6 +5,7 @@ import ProjectTag from "./ProjectTag";
 import ProjectCard from "./ProjectCard";
 import { motion } from "framer-motion";
 import { projects } from "@/types";
+import { fetchProjectData } from "@/actions/pb";
 
 const Project = () => {
   const [projects, setProjects] = useState<projects[]>([]);
@@ -27,45 +28,28 @@ const Project = () => {
   };
 
   useEffect(() => {
-    const abortController = new AbortController(); // AbortController oluştur
-    const fetchProjects = async () => {
+    const fetchHero = async () => {
       try {
-        const response = await fetch("/api/pb/projects", {
-          method: "GET",
-          signal: abortController.signal,
-        }); // İstek için abortController ekle
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`); // HTTP hatası kontrolü
-        }
-        const data = await response.json();
+        const data = await fetchProjectData();
         setProjects(data);
-        console.log(data);
-      } catch (error: unknown) {
-        // Hata türünü 'unknown' olarak belirtiyoruz
-        if (error instanceof Error && error.name !== "AbortError") {
-          // Hata nesnesi kontrolü
-          console.error("Error fetching projects:", error); // Sadece abort hatası dışındaki hataları göster
-        }
+      } catch (error) {
+        console.error(error);
       }
     };
-
-    fetchProjects(); // Fonksiyonu çağır
-
-    return () => {
-      abortController.abort(); // Bileşen unmount olduğunda isteği iptal et
-    };
+    fetchHero();
   }, []);
+
   return (
     <section id="projects" className="mb-12">
       <h2
-        className="text-center text-4xl text-mycolor-700 font-semibold
+        className="text-center text-4xl textOne font-semibold
         mt-4 mb-2 lg:mt-8 lg:mb-4"
       >
-        My Projects
+        Projelerim
       </h2>
 
       <div
-        className="text-white flex flex-row justify-center items-center
+        className="textOne flex flex-row justify-center items-center
         gap-5 py-6"
       >
         <ProjectTag

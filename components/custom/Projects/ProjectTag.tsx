@@ -8,8 +8,8 @@ interface ProjectTagProps {
 
 const ProjectTag = ({ isSelected, name, onClick }: ProjectTagProps) => {
   const buttonClasses = isSelected
-    ? "text-white border-mycolor-100"
-    : "text-slate-100 border-mycolor-200 hover:border-mycolor-100";
+    ? "text-mycolor-100 border-mycolor-100"
+    : "textOne border-mycolor-200 hover:border-mycolor-100";
 
   return (
     <button

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,10 +15,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`antialiased`}
-      >
-        <div className="flex min-h-screen flex-col bg-mycolor-300">{children}</div>
+      <body className={`antialiased`}>
+        <div className="flex min-h-screen flex-col bg-mycolor-300">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+          >
+            {children}
+          </ThemeProvider>
+        </div>
       </body>
     </html>
   );

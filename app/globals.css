@@ -4,3 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.bgOne {
+    @apply bg-white dark:bg-black !important;
+}
+.textOne {
+    @apply text-black dark:text-white !important;
+}
+
