@@ -1,6 +1,17 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { pb } from "./lib/pb";
+
+declare module "next-auth" {
+    interface Session {
+        user: {
+            id: string;
+            username?: string; // username özelliğini ekleyin
+            role?: any; // role özelliğini ekleyin
+            verified?: any; // verify özelliğini ekleyin
+        } & DefaultSession["user"];
+    }
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -39,22 +50,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       // Kullanıcı bilgileri varsa token'a ekle
-      if (user) {
+      if (user && 'username' in user && 'role' in user) {
         token.id = user.id;
-        token.username = user.username;
+        token.username = user.username; // Burada hata alıyorsanız, 'username' özelliği yok demektir.
         token.email = user.email;
         token.name = user.name;
         token.role = user.role;
-        token.verified = user.verified;
       }
       return token;
     },
     async session({ session, token }) {
       // Token'dan kullanıcı bilgilerini session'a ekle
       if (token) {
-        session.user.id = token.id;
-        session.user.username = token.username;
-        session.user.email = token.email;
+        session.user.id = token.id as string; // type assertion added
+        session.user.username = token.username as string; // type assertion added
+        session.user.email = token.email as string; // type assertion added
         session.user.name = token.name;
         session.user.role = token.role;
         session.user.verified = token.verified;
