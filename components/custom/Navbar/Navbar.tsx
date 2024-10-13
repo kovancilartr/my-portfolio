@@ -6,35 +6,20 @@ import { ModeToggle } from "../ModeToggle";
 import { useSession, signOut } from "next-auth/react";
 import { revalidatePath } from "next/cache";
 
-const NavLinks = [
-  {
-    name: "Ana Sayfa",
-    path: "/",
-  },
-  {
-    name: "Hakkımda",
-    path: "#about",
-  },
-  {
-    name: "Projeler",
-    path: "#projects",
-  },
-  {
-    name: "İletişim",
-    path: "#contact",
-  },
-  {
-    name: "Giriş",
-    path: "/auth/login",
-  },
-];
-const Navbar = () => {
+interface NavbarProps {
+  navLinks: {
+    name: string;
+    path: string;
+  }[];
+  logoutProps: boolean;
+}
+const Navbar = ({ navLinks, logoutProps }: NavbarProps) => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const { data: session } = useSession(); // Oturum bilgilerini al
 
   const handleLogout = async () => {
     await signOut(); // Oturumu kapat
-    revalidatePath("/") // Ana sayfayı yenileyin
+    revalidatePath("/"); // Ana sayfayı yenileyin
   };
 
   return (
@@ -49,14 +34,19 @@ const Navbar = () => {
 
         <div className="hidden md:block md:w-auto">
           <ul className="flex md:space-x-5 md:flex-row">
-            {NavLinks.filter((link) =>
-              session ? link.name !== "Giriş" : true
-            ).map((link, index) => (
-              <li key={index} className="inline-block">
-                <NavItem href={link.path} title={link.name} />
+            {navLinks
+              .filter((link) => (session ? link.name !== "Giriş" : true))
+              .map((link, index) => (
+                <li key={index} className="inline-block">
+                  <NavItem href={link.path} title={link.name} />
+                </li>
+              ))}
+            {session?.user.role === "Admin" && (
+              <li className="inline-block">
+                <NavItem href="/admin/dashboard" title="Admin" />
               </li>
-            ))}
-            {session && (
+            )}
+            {session && logoutProps && (
               <li className="inline-block">
                 <NavItem href="#" title="Çıkış" onClick={handleLogout} />
               </li>

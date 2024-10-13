@@ -3,14 +3,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { pb } from "./lib/pb";
 
 declare module "next-auth" {
-    interface Session {
-        user: {
-            id: string;
-            username?: string; // username özelliğini ekleyin
-            role?: any; // role özelliğini ekleyin
-            verified?: any; // verify özelliğini ekleyin
-        } & DefaultSession["user"];
-    }
+  interface Session {
+    user: {
+      id: string;
+      username?: string; // username özelliğini ekleyin
+      role?: any; // role özelliğini ekleyin
+      verified?: any; // verify özelliğini ekleyin
+    } & DefaultSession["user"];
+  }
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -47,10 +47,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  secret: process.env.AUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
       // Kullanıcı bilgileri varsa token'a ekle
-      if (user && 'username' in user && 'role' in user) {
+      if (user && "username" in user && "role" in user) {
         token.id = user.id;
         token.username = user.username; // Burada hata alıyorsanız, 'username' özelliği yok demektir.
         token.email = user.email;

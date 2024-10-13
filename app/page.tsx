@@ -6,12 +6,34 @@ import Navbar from "@/components/custom/Navbar/Navbar";
 import Project from "@/components/custom/Projects/Project";
 import { SessionProvider } from "next-auth/react";
 
+const NavLinks = [
+  {
+    name: "Ana Sayfa",
+    path: "/",
+  },
+  {
+    name: "Hakkımda",
+    path: "#about",
+  },
+  {
+    name: "Projeler",
+    path: "#projects",
+  },
+  {
+    name: "İletişim",
+    path: "#contact",
+  },
+  {
+    name: "Giriş",
+    path: "/auth/login",
+  },
+];
 export default function Home() {
   return (
     <>
       <SessionProvider>
         <main className="flex min-h-screen flex-col bgOne">
-          <Navbar />
+          <Navbar navLinks={NavLinks} logoutProps={true} />
           <div className="container mx-auto">
             <Hero />
             <Archive />
