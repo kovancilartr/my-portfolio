@@ -11,9 +11,9 @@ export async function middleware(req: any) {
   if (req.nextUrl.pathname.startsWith("/admin")) {
     if (user && user.role === "Admin") {
       return auth(req);
+    } else {
+      return NextResponse.redirect(new URL("/security", req.url));
     }
-
-    return NextResponse.redirect(new URL("/security", req.url));
   }
 
   return NextResponse.next();
